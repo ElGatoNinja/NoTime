@@ -1,0 +1,6 @@
+H:\Users\Bill\Documents\NoTime\.mono\temp\obj\Tools\NoTime.csprojAssemblyReference.cache
+H:\Users\Bill\Documents\NoTime\.mono\temp\obj\Tools\NoTime.csproj.CoreCompileInputs.cache
+H:\Users\Bill\Documents\NoTime\.mono\temp\bin\Tools\NoTime.dll
+H:\Users\Bill\Documents\NoTime\.mono\temp\bin\Tools\NoTime.pdb
+H:\Users\Bill\Documents\NoTime\.mono\temp\obj\Tools\NoTime.dll
+H:\Users\Bill\Documents\NoTime\.mono\temp\obj\Tools\NoTime.pdb
