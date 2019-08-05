@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/jump_7.png-f4a70829230f6e8cbc2afa70154338f2.stex"
+path="res://.import/spritesheet_amanda_0.2.png-93b0b22104e83884dac5853ca348efb5.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/amanda/jump/jump_7.png"
-dest_files=[ "res://.import/jump_7.png-f4a70829230f6e8cbc2afa70154338f2.stex" ]
+source_file="res://assets/amanda/spritesheet_amanda_0.2.png"
+dest_files=[ "res://.import/spritesheet_amanda_0.2.png-93b0b22104e83884dac5853ca348efb5.stex" ]
 
 [params]
 

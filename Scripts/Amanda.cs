@@ -4,118 +4,151 @@ using System;
 public class Amanda : KinematicBody2D
 {
 
-    //varaibles preceded by underScore are state variables. And contain the info of the state of the player
-
     [Export]
     public Vector2 speed = new Vector2(0,0);
     [Export]
-    public float AmandasGravity = 9.8f;
+    public float[] amandaGravities = {100,100,100};
+    [Export]
+    public float velocityDelayX = 100;
+    private float accTime = 0;
 
-    public Vector2 velocity = Vector2.Zero;
-
-    public bool _isLookingAtRight = true;
-    public bool _running = false;
-    public bool _jumping = false;
-    public bool _falling = true;
+    private Vector2 _velocity = Vector2.Zero;
+    private int _directionX = 1;
     public int _proximityDetected = -1;
-    private AnimatedSprite animatedSprite;
+
+    private AnimationTree _animTree;
+    public AnimationNodeStateMachinePlayback _stateMachine;
+    private String _prevState;
 
 
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        animatedSprite = animatedSprite = GetNode<AnimatedSprite>("AnimatedSprite");
+        _animTree = GetNode<AnimationTree>("AnimationTree");
+        _animTree.Active = true;
+        _stateMachine = (AnimationNodeStateMachinePlayback)_animTree.Get("parameters/playback");
+
     }
 
     public override void _PhysicsProcess(float delta)
     {
-
-        this.ProcessInput();
-
-        if (_jumping)
+        StateTransition(_prevState,_stateMachine.GetCurrentNode());
+        _prevState = _stateMachine.GetCurrentNode();
+        switch(_stateMachine.GetCurrentNode())
         {
-            velocity.y = -speed.y;
-            _falling = true;
-        }
-        else if(_running)
-        {
-            if(_isLookingAtRight)
-                velocity.x = speed.x;
-            else
-                velocity.x = -speed.x;
-        }
-        else 
-        {
-            velocity.x = 0;
-        }
+            case "idle":
+            _velocity = Vector2.Zero;
+            accTime = 0;
+            break;
 
+            case "start_run":
+            accTime += delta;
+            _velocity.x +=  speed.x*(1-Mathf.Exp(accTime/velocityDelayX)); //horizontal velocity follows an inverse exponential model
+            break;
 
-        velocity = MoveAndSlide(velocity,new Vector2(0,-1));
-        if(!IsOnFloor())
-            velocity.y += AmandasGravity*delta;
-        else
-        {
-            velocity.y = 10;
-            _falling = false;
+            case "run_stepR":
+            case "run_stepL":
+            
+            _velocity.x = speed.x*_directionX;
+            _velocity.y = 10;
+            break;
+
+            case "jump_up_stepR":
+            case "jump_up_stepL":
+            //diferent gravities for each jump stage
+            _velocity.y += amandaGravities[0]*delta;
+            break;
+
+            case "jump":
+            case "jump_land":
+            _velocity.y += amandaGravities[2]*delta;
+            break;
+
         }
-
+        
+        _velocity = MoveAndSlide(_velocity,new Vector2(0,-1));
+        
     }
     public override void _Process(float delta)
     {
 
-        if (_jumping)
+        switch(_stateMachine.GetCurrentNode())
         {
-            animatedSprite.Animation = "jump_up";
-            _jumping = false;
-       
-        }else if (_falling)
-        {
-            if(_proximityDetected == 0)
-                animatedSprite.Animation = "jump_down";
-        }
-        else if(_running)
-        {
-            animatedSprite.Animation = "run";
-        }
-        else
-        {
-            animatedSprite.Animation = "idle";
+            case "idle":
+                if (Input.IsActionJustPressed("ui_right")) 
+                {
+                    _stateMachine.Travel("start_run");
+                }
+                else if (Input.IsActionJustPressed("ui_left"))
+                {
+                    _stateMachine.Travel("start_run");
+                }
+                else if(Input.IsActionJustPressed("ui_up"))
+                {
+                    _stateMachine.Travel("jump");
+                }
+                break;
+
+            case "start_run":    
+            break;
+
+            case "run_stepR":
+            case "run_stepL":
+                if(Input.IsActionPressed("ui_right") || Input.IsActionJustPressed("ui_right"))
+                {
+                    _directionX = 1;
+                }
+                else if(Input.IsActionPressed("ui_left") || Input.IsActionJustPressed("ui_left"))
+                {
+                    _directionX = -1;
+                }
+                else if(Input.IsActionJustPressed("ui_up"))
+                {
+                    _stateMachine.Travel("jump");
+                }
+
+                else if(!Input.IsActionPressed("ui_right") && !Input.IsActionPressed("ui_left"))
+                {
+                    _stateMachine.Travel("idle");
+                }
+
+            break;
+
+            case "jump_up_stepR":
+            case "jump_up_stepL":
+            
+            break;
+
+            case "jump":
+            case "jump_land":
+                if((Input.IsActionPressed("ui_right") || Input.IsActionPressed("ui_left") ) && IsOnFloor())
+                {
+                    _stateMachine.Travel("run_stepR");
+                }
+                else if(IsOnFloor())
+                {
+                    _stateMachine.Travel("idle");
+                }
+            break;
         }
 
-        //if moving to left, flip the animation
-        animatedSprite.FlipH = !_isLookingAtRight;
-
-        animatedSprite.Play();
         CleanProximityDetected();
 
     }
 
-    //GetInput Manages the respose to input events for Amanda
-    private void ProcessInput()
+    //Function that activate some events that should happen just one time in the transition between 2 states, (place in phisycPrecess())
+    private void StateTransition(String prevState,String nextState)
     {
-        _running = false;
+        if(nextState == prevState) return;
 
-        if(Input.IsActionJustPressed("ui_up") && IsOnFloor())
+        if(nextState == "jump_up_stepR" || nextState == "jump_upstepL")
         {
-            _jumping = true;
-        }
-
-        if (Input.IsActionPressed("ui_right"))
-        {
-            _running = true;
-            _isLookingAtRight = true;
-        }
-        if (Input.IsActionPressed("ui_left"))
-        {
-            _running = true;
-            _isLookingAtRight = false;
-        } 
-        if(Input.IsActionJustReleased("ui_right") || Input.IsActionJustReleased("ui_left"))
-        {
-            _running = false;
+            _velocity.y = speed.y;
         }
     }
+
+
 
 
     //Signal recived every time Amanda is "close" to something (floor,walls,etc)

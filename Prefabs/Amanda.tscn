@@ -1,74 +1,258 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Scripts/Amanda.cs" type="Script" id=1]
-[ext_resource path="res://assets/amanda/idle/idle_1.png" type="Texture" id=2]
-[ext_resource path="res://assets/amanda/idle/idle_2.png" type="Texture" id=3]
-[ext_resource path="res://assets/amanda/run/run_1.png" type="Texture" id=4]
-[ext_resource path="res://assets/amanda/run/run_2.png" type="Texture" id=5]
-[ext_resource path="res://assets/amanda/run/run_3.png" type="Texture" id=6]
-[ext_resource path="res://assets/amanda/run/run_4.png" type="Texture" id=7]
-[ext_resource path="res://assets/amanda/run/run_5.png" type="Texture" id=8]
-[ext_resource path="res://assets/amanda/run/run_6.png" type="Texture" id=9]
-[ext_resource path="res://assets/amanda/run/run_7.png" type="Texture" id=10]
-[ext_resource path="res://assets/amanda/run/run_8.png" type="Texture" id=11]
-[ext_resource path="res://assets/amanda/jump/jump_5.png" type="Texture" id=12]
-[ext_resource path="res://assets/amanda/jump/jump_6.png" type="Texture" id=13]
-[ext_resource path="res://assets/amanda/jump/jump_7.png" type="Texture" id=14]
-[ext_resource path="res://assets/amanda/jump/jump_1.png" type="Texture" id=15]
-[ext_resource path="res://assets/amanda/jump/jump_2.png" type="Texture" id=16]
-[ext_resource path="res://assets/amanda/jump/jump_3.png" type="Texture" id=17]
-[ext_resource path="res://assets/amanda/jump/jump_4.png" type="Texture" id=18]
+[ext_resource path="res://assets/amanda/spritesheet_amanda_0.2.png" type="Texture" id=2]
 
-[sub_resource type="SpriteFrames" id=1]
-animations = [ {
-"frames": [ ExtResource( 2 ), ExtResource( 3 ) ],
-"loop": false,
-"name": "idle",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ],
-"loop": true,
-"name": "run",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ) ],
-"loop": false,
-"name": "jump_down",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ) ],
-"loop": false,
-"name": "jump_up",
-"speed": 10.0
-} ]
+[sub_resource type="Animation" id=1]
+resource_name = "idle_lookR"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 15, 16, 17, 18, 19, 20 ]
+}
 
-[sub_resource type="CapsuleShape2D" id=2]
-radius = 45.2632
-height = 110.859
+[sub_resource type="Animation" id=2]
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 8, 9, 10 ]
+}
 
-[sub_resource type="RayShape2D" id=3]
-length = 231.239
+[sub_resource type="Animation" id=3]
+length = 0.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 12, 11 ]
+}
+
+[sub_resource type="Animation" id=4]
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 12, 13, 14 ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.4
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 2, 3, 4, 5 ]
+}
+
+[sub_resource type="Animation" id=6]
+length = 0.4
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 6, 7, 0, 1 ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "start_run_lookR"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 21, 5 ]
+}
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "idle_lookR"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "jump_stage2_lookR"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "jump_stage3_lookR"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "jump_stage1_stepR_lookR"
+
+[sub_resource type="AnimationNodeAnimation" id=12]
+animation = "jump_stage1_stepR_lookR"
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "run_stepL_lookR"
+
+[sub_resource type="AnimationNodeAnimation" id=14]
+animation = "run_stepR_lookR"
+
+[sub_resource type="AnimationNodeAnimation" id=15]
+animation = "start_run_lookR"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=17]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=18]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=19]
+switch_mode = 2
+auto_advance = true
+priority = 5
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+advance_condition = "_proximityDetected == 1"
+priority = 29
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+switch_mode = 2
+priority = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
+switch_mode = 2
+advance_condition = "IsOnFloor()"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=25]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=26]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=27]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+switch_mode = 2
+auto_advance = true
+priority = 4
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=29]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id=30]
+states/idle/node = SubResource( 8 )
+states/idle/position = Vector2( -40, 4.2013 )
+states/jump/node = SubResource( 9 )
+states/jump/position = Vector2( 297, 269 )
+states/jump_land/node = SubResource( 10 )
+states/jump_land/position = Vector2( -40, 201 )
+states/jump_up_stepL/node = SubResource( 11 )
+states/jump_up_stepL/position = Vector2( 572.105, 183 )
+states/jump_up_stepR/node = SubResource( 12 )
+states/jump_up_stepR/position = Vector2( 297, 183 )
+states/run_stepL/node = SubResource( 13 )
+states/run_stepL/position = Vector2( 572.105, 95 )
+states/run_stepR/node = SubResource( 14 )
+states/run_stepR/position = Vector2( 297, 95 )
+states/start_run/node = SubResource( 15 )
+states/start_run/position = Vector2( 98, 95 )
+transitions = [ "run_stepR", "run_stepL", SubResource( 16 ), "run_stepL", "run_stepR", SubResource( 17 ), "run_stepR", "jump_up_stepR", SubResource( 18 ), "jump_up_stepR", "jump", SubResource( 19 ), "jump", "jump_land", SubResource( 20 ), "jump_land", "run_stepR", SubResource( 21 ), "run_stepL", "jump_up_stepL", SubResource( 22 ), "jump_up_stepL", "jump", SubResource( 23 ), "jump_land", "idle", SubResource( 24 ), "run_stepR", "idle", SubResource( 25 ), "idle", "start_run", SubResource( 26 ), "start_run", "run_stepR", SubResource( 27 ), "start_run", "jump_up_stepR", SubResource( 28 ), "run_stepL", "idle", SubResource( 29 ) ]
+start_node = "jump"
+graph_offset = Vector2( -199.06, -84.3119 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=31]
+
+[sub_resource type="CapsuleShape2D" id=32]
+radius = 49.7986
+height = 298.748
+
+[sub_resource type="RayShape2D" id=33]
+length = 306.091
 
 [node name="Amanda" type="KinematicBody2D"]
+scale = Vector2( 0.7, 0.7 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
 }
-speed = Vector2( 500, 4000 )
+speed = Vector2( 500, -1000 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-scale = Vector2( 0.11, 0.11 )
-frames = SubResource( 1 )
-animation = "run"
-frame = 3
-playing = true
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+vframes = 4
+hframes = 8
+frame = 20
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/idle_lookR = SubResource( 1 )
+anims/jump_stage1_stepR_lookR = SubResource( 2 )
+anims/jump_stage2_lookR = SubResource( 3 )
+anims/jump_stage3_lookR = SubResource( 4 )
+anims/run_stepL_lookR = SubResource( 5 )
+anims/run_stepR_lookR = SubResource( 6 )
+anims/start_run_lookR = SubResource( 7 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 30 )
+anim_player = NodePath("../AnimationPlayer")
+parameters/playback = SubResource( 31 )
+parameters/conditions/IsOnFloor() = false
+"parameters/conditions/_proximityDetected == 1" = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 4.08112, -1.36038 )
-shape = SubResource( 2 )
+shape = SubResource( 32 )
 
 [node name="EnviromentProximity" type="Area2D" parent="."]
 
 [node name="FloorProxy" type="CollisionShape2D" parent="EnviromentProximity"]
-shape = SubResource( 3 )
+shape = SubResource( 33 )
 [connection signal="body_shape_entered" from="EnviromentProximity" to="." method="OnSomethingClose"]
