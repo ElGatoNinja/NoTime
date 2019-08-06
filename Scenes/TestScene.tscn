@@ -9,7 +9,6 @@ script = ExtResource( 1 )
 
 [node name="Amanda" parent="." instance=ExtResource( 2 )]
 position = Vector2( 199.333, 317.176 )
-amandaGravities = PoolRealArray( 1000, 1000, 1000 )
 
 [node name="TestPlatform" parent="." instance=ExtResource( 3 )]
 position = Vector2( 9.17873, 955.575 )
@@ -130,8 +129,29 @@ margin_left = 105.0
 margin_top = 20.0
 margin_right = 163.0
 margin_bottom = 44.0
+
+[node name="Acc Edit" type="GridContainer" parent="."]
+anchor_bottom = 0.37
+margin_left = 23.4839
+margin_top = 140.0
+margin_right = 304.484
+margin_bottom = 214.0
+custom_constants/vseparation = 6
+columns = 2
+
+[node name="Label" type="Label" parent="Acc Edit"]
+margin_top = 5.0
+margin_right = 40.0
+margin_bottom = 19.0
+text = "Delay "
+
+[node name="acc" type="LineEdit" parent="Acc Edit"]
+margin_left = 44.0
+margin_right = 102.0
+margin_bottom = 24.0
 [connection signal="text_entered" from="GravityEdit/Gravity_1" to="." method="OnGravity1TextEntered"]
 [connection signal="text_entered" from="GravityEdit/Gravity_2" to="." method="OnGravity2TextEntered"]
 [connection signal="text_entered" from="GravityEdit/Gravity_3" to="." method="OnGravity3TextEntered"]
 [connection signal="text_entered" from="Speed Edit/Speed_X" to="." method="OnSpeedXTextEntered"]
 [connection signal="text_entered" from="Speed Edit/Speed_Y" to="." method="OnSpeedYTextEntered"]
+[connection signal="text_entered" from="Acc Edit/acc" to="." method="OnDelayTextEntered"]

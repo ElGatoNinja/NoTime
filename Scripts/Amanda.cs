@@ -5,15 +5,15 @@ public class Amanda : KinematicBody2D
 {
 
     [Export]
-    public Vector2 speed = new Vector2(0,0);
+    public Vector2 speed = new Vector2(0, 0);
     [Export]
-    public float[] amandaGravities = {100,100,100};
+    public int[] amandaGravities = { 100, 100, 100 };
     [Export]
     public float velocityDelayX = 100;
     private float accTime = 0;
 
     private Vector2 _velocity = Vector2.Zero;
-    private int _directionX = 1;
+    public int _speedDir = 1;
     public int _proximityDetected = -1;
 
     private AnimationTree _animTree;
@@ -33,104 +33,127 @@ public class Amanda : KinematicBody2D
 
     public override void _PhysicsProcess(float delta)
     {
-        StateTransition(_prevState,_stateMachine.GetCurrentNode());
+        StateTransition(_prevState, _stateMachine.GetCurrentNode());
         _prevState = _stateMachine.GetCurrentNode();
-        switch(_stateMachine.GetCurrentNode())
+        switch (_stateMachine.GetCurrentNode())
         {
             case "idle":
-            _velocity = Vector2.Zero;
-            accTime = 0;
-            break;
+                _velocity = Vector2.Zero;
+                break;
 
             case "start_run":
-            accTime += delta;
-            _velocity.x +=  speed.x*(1-Mathf.Exp(accTime/velocityDelayX)); //horizontal velocity follows an inverse exponential model
-            break;
+                //accTime += delta;
+                //_velocity.x += speed.x * (1 - Mathf.Exp(accTime / velocityDelayX)) * _speedDir; //horizontal velocity follows an inverse exponential model
+                _velocity.x = speed.x * _speedDir;
+                _velocity.y = 10;
+                break;
 
             case "run_stepR":
             case "run_stepL":
-            
-            _velocity.x = speed.x*_directionX;
-            _velocity.y = 10;
-            break;
+
+                _velocity.x = speed.x * _speedDir;
+                _velocity.y = 10;
+                break;
 
             case "jump_up_stepR":
             case "jump_up_stepL":
-            //diferent gravities for each jump stage
-            _velocity.y += amandaGravities[0]*delta;
-            break;
+                //diferent gravities for each jump stage
+                _velocity.y += amandaGravities[0] * delta;
+                break;
 
             case "jump":
             case "jump_land":
-            _velocity.y += amandaGravities[2]*delta;
-            break;
+                _velocity.y += amandaGravities[2] * delta;
+                _velocity.x += speed.x * (1 - Mathf.Exp(accTime / velocityDelayX)) * _speedDir;
+                break;
 
         }
-        
-        _velocity = MoveAndSlide(_velocity,new Vector2(0,-1));
-        
+
+        _velocity = MoveAndSlide(_velocity, new Vector2(0, -1));
+
     }
     public override void _Process(float delta)
     {
 
-        switch(_stateMachine.GetCurrentNode())
+        switch (_stateMachine.GetCurrentNode())
         {
             case "idle":
-                if (Input.IsActionJustPressed("ui_right")) 
-                {
-                    _stateMachine.Travel("start_run");
-                }
-                else if (Input.IsActionJustPressed("ui_left"))
-                {
-                    _stateMachine.Travel("start_run");
-                }
-                else if(Input.IsActionJustPressed("ui_up"))
+                if (Input.IsActionJustPressed("ui_up"))
                 {
                     _stateMachine.Travel("jump");
+                }
+                else if (Input.IsActionPressed("ui_right"))
+                {
+                    _speedDir = 1;
+                    _stateMachine.Travel("start_run");
+                }
+                else if (Input.IsActionPressed("ui_left"))
+                {
+                    _speedDir = -1;
+                    _stateMachine.Travel("start_run");
                 }
                 break;
 
-            case "start_run":    
-            break;
-
+            case "start_run":  //differs in physics
             case "run_stepR":
             case "run_stepL":
-                if(Input.IsActionPressed("ui_right") || Input.IsActionJustPressed("ui_right"))
+                if (Input.IsActionPressed("ui_right")) _speedDir = 1;
+                else if (Input.IsActionPressed("ui_left")) _speedDir = -1;
+                else _speedDir = 0;
+
+                if(_speedDir * GetNode<Sprite>("Sprite").Scale.x < 0)     //this is only true when the player wants to turn
                 {
-                    _directionX = 1;
+                    _stateMachine.Travel("run_turn");
                 }
-                else if(Input.IsActionPressed("ui_left") || Input.IsActionJustPressed("ui_left"))
-                {
-                    _directionX = -1;
-                }
-                else if(Input.IsActionJustPressed("ui_up"))
+                else if (Input.IsActionJustPressed("ui_up"))
                 {
                     _stateMachine.Travel("jump");
                 }
-
-                else if(!Input.IsActionPressed("ui_right") && !Input.IsActionPressed("ui_left"))
+                else if (_speedDir == 0)
                 {
                     _stateMachine.Travel("idle");
                 }
-
-            break;
+                break;
 
             case "jump_up_stepR":
             case "jump_up_stepL":
-            
-            break;
+                break;
 
             case "jump":
-            case "jump_land":
-                if((Input.IsActionPressed("ui_right") || Input.IsActionPressed("ui_left") ) && IsOnFloor())
+                if (Input.IsActionPressed("ui_right")) _speedDir = 1;
+                else if (Input.IsActionPressed("ui_left")) _speedDir = -1;
+                else _speedDir = 0;
+
+                if (_proximityDetected == 0)
+                {
+                    _proximityDetected = -1;
+                    _stateMachine.Travel("jump_land");
+                }
+                else if ((Input.IsActionPressed("ui_right") || Input.IsActionPressed("ui_left")) && IsOnFloor()) //in case that the proximity detector fails
                 {
                     _stateMachine.Travel("run_stepR");
                 }
-                else if(IsOnFloor())
+                else if (IsOnFloor())
                 {
                     _stateMachine.Travel("idle");
                 }
-            break;
+                break;
+
+            case "jump_land":
+
+                if ((Input.IsActionPressed("ui_right") || Input.IsActionPressed("ui_left")) && IsOnFloor())
+                {
+                    _stateMachine.Travel("run_stepR");
+                }
+                else if (IsOnFloor())
+                {
+                    _stateMachine.Travel("idle");
+                }
+                break;
+
+            case "run_turn":
+            case "idle_turn":
+                break;
         }
 
         CleanProximityDetected();
@@ -138,13 +161,24 @@ public class Amanda : KinematicBody2D
     }
 
     //Function that activate some events that should happen just one time in the transition between 2 states, (place in phisycPrecess())
-    private void StateTransition(String prevState,String nextState)
+    private void StateTransition(String prevState, String nextState)
     {
-        if(nextState == prevState) return;
-
-        if(nextState == "jump_up_stepR" || nextState == "jump_upstepL")
+        
+        if (nextState == prevState) return;
+        GD.Print(nextState);
+        if (nextState == "jump_up_stepR" || nextState == "jump_upstepL")
         {
             _velocity.y = speed.y;
+            accTime = 0;
+        }
+        else if (nextState == "start_run")
+        {
+            accTime = 0;
+        }
+        else if (nextState == "run_turn")
+        {
+            GetNode<Sprite>("Sprite").Scale *= new Vector2(-1,1);
+            GD.Print(GetNode<Sprite>("Sprite").Scale);
         }
     }
 

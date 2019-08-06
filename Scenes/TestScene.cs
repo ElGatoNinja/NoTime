@@ -10,6 +10,8 @@ public class TestScene : Node2D
     public GridContainer GravityEdit;
     public GridContainer SpeedEdit;
 
+    public GridContainer AccEdit;
+
 
     public override void _Ready()
     {
@@ -17,6 +19,7 @@ public class TestScene : Node2D
         Amanda = GetNode<Amanda>("Amanda");
         GravityEdit = GetNode<GridContainer>("GravityEdit");
         SpeedEdit = GetNode<GridContainer>("Speed Edit");
+        AccEdit = GetNode<GridContainer>("Acc Edit");
 
         GravityEdit.GetNode<LineEdit>("Gravity_1").Text = Convert.ToString(Amanda.amandaGravities[0]);
         GravityEdit.GetNode<LineEdit>("Gravity_2").Text = Convert.ToString(Amanda.amandaGravities[0]);
@@ -24,27 +27,28 @@ public class TestScene : Node2D
 
         SpeedEdit.GetNode<LineEdit>("Speed_X").Text = Convert.ToString(Amanda.speed.x);
         SpeedEdit.GetNode<LineEdit>("Speed_Y").Text = Convert.ToString(Amanda.speed.y);
+        AccEdit.GetNode<LineEdit>("acc").Text = Convert.ToString(Amanda.velocityDelayX);
     }
 
 
     public override void _Process(float delta)
     {
-        control.SetText(Amanda._stateMachine.GetCurrentNode() + "\n\n onFloor: " + Amanda.IsOnFloor());
+        control.SetText(Amanda._stateMachine.GetCurrentNode() + "\n\n speedDir: " + Amanda.GetNode<Sprite>("Sprite").Scale.x+ "\n ScaleX: "+Amanda.Scale.x);
     }
 
     private void OnGravity1TextEntered(string text)
     {
-        Amanda.amandaGravities[0] = Convert.ToInt64(text);
+        Amanda.amandaGravities[0] = (int) Convert.ToInt64(text);
         GravityEdit.GetNode<LineEdit>("Gravity_1").ReleaseFocus();
     }
     private void OnGravity2TextEntered(string text)
     {
-        Amanda.amandaGravities[1] = Convert.ToInt64(text);
+        Amanda.amandaGravities[1] = (int)Convert.ToInt64(text);
         GravityEdit.GetNode<LineEdit>("Gravity_2").ReleaseFocus();
     }
     private void OnGravity3TextEntered(string text)
     {
-        Amanda.amandaGravities[2] = Convert.ToInt64(text);
+        Amanda.amandaGravities[2] = (int)Convert.ToInt64(text);
         GravityEdit.GetNode<LineEdit>("Gravity_3").ReleaseFocus();
     }
 
@@ -58,5 +62,11 @@ public class TestScene : Node2D
     {
         Amanda.speed.y = Convert.ToInt64(text);
         SpeedEdit.GetNode<LineEdit>("Speed_Y").ReleaseFocus();
+    }
+
+    private void OnDelayTextEntered(String text)
+    {
+        Amanda.velocityDelayX = Convert.ToInt64(text);
+        AccEdit.GetNode<LineEdit>("acc").ReleaseFocus();
     }
 }
