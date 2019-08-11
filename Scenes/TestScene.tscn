@@ -22,7 +22,6 @@ margin_bottom = 363.751
 text = "no me jodas"
 
 [node name="GravityEdit" type="GridContainer" parent="."]
-editor/display_folded = true
 anchor_bottom = 0.37
 margin_left = 17.0687
 margin_top = 14.6303
@@ -85,7 +84,6 @@ margin_bottom = 44.0
 focus_neighbour_left = NodePath("../Gravity_1")
 
 [node name="Speed Edit" type="GridContainer" parent="."]
-editor/display_folded = true
 anchor_bottom = 0.37
 margin_left = 23.4839
 margin_top = 77.5407
