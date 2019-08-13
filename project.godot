@@ -24,6 +24,10 @@ config/icon="res://icon.png"
 window/size/width=1800
 window/size/height=1080
 
+[editor_plugins]
+
+enabled=PoolStringArray(  )
+
 [input]
 
 ui_left={

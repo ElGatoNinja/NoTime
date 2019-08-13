@@ -21,9 +21,9 @@ public class TestScene : Node2D
         SpeedEdit = GetNode<GridContainer>("Speed Edit");
         AccEdit = GetNode<GridContainer>("Acc Edit");
 
-        //GravityEdit.GetNode<LineEdit>("Gravity_1").Text = Convert.ToString(Amanda.amandaGravities[0]);
-        //GravityEdit.GetNode<LineEdit>("Gravity_2").Text = Convert.ToString(Amanda.amandaGravities[0]);
-        //GravityEdit.GetNode<LineEdit>("Gravity_3").Text = Convert.ToString(Amanda.amandaGravities[0]);
+        GravityEdit.GetNode<LineEdit>("Gravity_1").Text = Convert.ToString(amanda.amandaGravities[0]);
+        GravityEdit.GetNode<LineEdit>("Gravity_2").Text = Convert.ToString(amanda.amandaGravities[1]);
+        GravityEdit.GetNode<LineEdit>("Gravity_3").Text = Convert.ToString(amanda.amandaGravities[2]);
 
         SpeedEdit.GetNode<LineEdit>("Speed_X").Text = Convert.ToString(amanda.speed.x);
         SpeedEdit.GetNode<LineEdit>("Speed_Y").Text = Convert.ToString(amanda.speed.y);
@@ -38,17 +38,17 @@ public class TestScene : Node2D
 
     private void OnGravity1TextEntered(string text)
     {
-       // Amanda.amandaGravities[0] = (int) Convert.ToInt64(text);
+        amanda.amandaGravities[0] = (int) Convert.ToInt64(text);
         GravityEdit.GetNode<LineEdit>("Gravity_1").ReleaseFocus();
     }
     private void OnGravity2TextEntered(string text)
     {
-        //Amanda.amandaGravities[1] = (int)Convert.ToInt64(text);
+        amanda.amandaGravities[1] = (int)Convert.ToInt64(text);
         GravityEdit.GetNode<LineEdit>("Gravity_2").ReleaseFocus();
     }
     private void OnGravity3TextEntered(string text)
     {
-        //Amanda.amandaGravities[2] = (int)Convert.ToInt64(text);
+        amanda.amandaGravities[2] = (int)Convert.ToInt64(text);
         GravityEdit.GetNode<LineEdit>("Gravity_3").ReleaseFocus();
     }
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/idle_2.png-bbedb58ab115ccb7e349d11fbf20e094.stex"
+path="res://.import/amandaSheet_1.png-3de8ffc4981d75af325ebfbc77b2df55.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/amanda/idle/idle_2.png"
-dest_files=[ "res://.import/idle_2.png-bbedb58ab115ccb7e349d11fbf20e094.stex" ]
+source_file="res://assets/amanda/amandaSheet_1.png"
+dest_files=[ "res://.import/amandaSheet_1.png-3de8ffc4981d75af325ebfbc77b2df55.stex" ]
 
 [params]
 
