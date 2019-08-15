@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://Scripts/Amanda.cs" type="Script" id=1]
 [ext_resource path="res://assets/amanda/amandaSheet_1.png" type="Texture" id=2]
@@ -102,7 +102,7 @@ tracks/0/keys = {
 "values": [ 6, 7, 0, 1 ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=8]
 length = 0.9
 step = 0.13
 tracks/0/type = "value"
@@ -118,8 +118,7 @@ tracks/0/keys = {
 "values": [ 21, 5, 6, 7, 0, 1, 2, 3, 4, 5 ]
 }
 
-[sub_resource type="Animation" id=8]
-resource_name = "stop_run"
+[sub_resource type="Animation" id=9]
 length = 0.35
 loop = true
 step = 0.07
@@ -136,75 +135,88 @@ tracks/0/keys = {
 "values": [ 23, 23, 24, 25, 26 ]
 }
 
-[sub_resource type="AnimationNodeAnimation" id=10]
-animation = "idle_lookR"
+[sub_resource type="CapsuleShape2D" id=10]
+radius = 49.7986
+height = 287.314
 
-[sub_resource type="AnimationNodeAnimation" id=11]
-animation = "justWait"
+[sub_resource type="RayShape2D" id=11]
+length = 408.933
 
 [sub_resource type="AnimationNodeAnimation" id=12]
-animation = "jump_stage2_lookR"
+animation = "idle_lookR"
 
 [sub_resource type="AnimationNodeAnimation" id=13]
-animation = "jump_stage3_lookR"
+animation = "justWait"
 
 [sub_resource type="AnimationNodeAnimation" id=14]
-animation = "jump_stage1_stepR_lookR"
+animation = "jump_stage2_lookR"
 
 [sub_resource type="AnimationNodeAnimation" id=15]
-animation = "jump_stage1_stepR_lookR"
+animation = "jump_stage3_lookR"
 
 [sub_resource type="AnimationNodeAnimation" id=16]
 animation = "jump_stage1_stepR_lookR"
 
 [sub_resource type="AnimationNodeAnimation" id=17]
-animation = "run_stepL_lookR"
+animation = "jump_stage1_stepR_lookR"
 
 [sub_resource type="AnimationNodeAnimation" id=18]
-animation = "run_stepR_lookR"
+animation = "jump_stage1_stepR_lookR"
 
 [sub_resource type="AnimationNodeAnimation" id=19]
-animation = "justWait"
+animation = "run_stepL_lookR"
 
 [sub_resource type="AnimationNodeAnimation" id=20]
+animation = "run_stepR_lookR"
+
+[sub_resource type="AnimationNodeAnimation" id=21]
+animation = "justWait"
+
+[sub_resource type="AnimationNodeAnimation" id=22]
 animation = "start_run_lookR"
 
-[sub_resource type="AnimationNodeAnimation" id=49]
+[sub_resource type="AnimationNodeAnimation" id=23]
 animation = "stop_run"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=21]
-switch_mode = 2
-auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=22]
-switch_mode = 2
-auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=23]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=24]
 switch_mode = 2
 auto_advance = true
-priority = 5
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=25]
-priority = 29
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=26]
-switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=27]
-switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=29]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=30]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=31]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=32]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=33]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=34]
+switch_mode = 2
+auto_advance = true
+priority = 3
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=35]
 switch_mode = 2
 auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=36]
+switch_mode = 2
+auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=37]
 switch_mode = 2
@@ -221,69 +233,67 @@ auto_advance = true
 [sub_resource type="AnimationNodeStateMachineTransition" id=41]
 switch_mode = 2
 auto_advance = true
-priority = 3
+priority = 5
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=42]
+switch_mode = 2
+auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=43]
-switch_mode = 2
-auto_advance = true
+priority = 29
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=44]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=45]
 switch_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=50]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=51]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=52]
-switch_mode = 2
-auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=53]
+[sub_resource type="AnimationNodeStateMachineTransition" id=46]
 switch_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=54]
+[sub_resource type="AnimationNodeStateMachineTransition" id=47]
 switch_mode = 2
-auto_advance = true
 
-[sub_resource type="AnimationNodeStateMachine" id=45]
-states/idle/node = SubResource( 10 )
-states/idle/position = Vector2( -264, 42.2013 )
-states/idle_turn/node = SubResource( 11 )
-states/idle_turn/position = Vector2( -181, -37.7987 )
-states/jump/node = SubResource( 12 )
-states/jump/position = Vector2( 532.105, 269 )
-states/jump_land/node = SubResource( 13 )
-states/jump_land/position = Vector2( -181, 126 )
-states/jump_up_stepL/node = SubResource( 14 )
-states/jump_up_stepL/position = Vector2( 532.105, 126 )
-states/jump_up_stepR/node = SubResource( 15 )
-states/jump_up_stepR/position = Vector2( 297, 126 )
-states/jump_up_vert/node = SubResource( 16 )
-states/jump_up_vert/position = Vector2( 91, 126 )
-states/run_stepL/node = SubResource( 17 )
-states/run_stepL/position = Vector2( 532.105, 42.2013 )
-states/run_stepR/node = SubResource( 18 )
-states/run_stepR/position = Vector2( 297, 42.2013 )
-states/run_turn/node = SubResource( 19 )
-states/run_turn/position = Vector2( 364, -59.7987 )
-states/start_run/node = SubResource( 20 )
-states/start_run/position = Vector2( 49.623, -97.7987 )
-states/stop_run/node = SubResource( 49 )
-states/stop_run/position = Vector2( 25.623, 42.2013 )
-transitions = [ "run_stepR", "run_stepL", SubResource( 21 ), "run_stepL", "run_stepR", SubResource( 22 ), "run_stepR", "jump_up_stepR", SubResource( 23 ), "jump_up_stepR", "jump", SubResource( 24 ), "jump", "jump_land", SubResource( 25 ), "jump_land", "run_stepR", SubResource( 26 ), "jump_land", "idle", SubResource( 27 ), "idle", "start_run", SubResource( 29 ), "start_run", "jump_up_stepR", SubResource( 31 ), "run_turn", "start_run", SubResource( 35 ), "run_stepL", "jump_up_stepL", SubResource( 36 ), "jump_up_stepL", "jump", SubResource( 37 ), "start_run", "idle", SubResource( 38 ), "idle", "idle_turn", SubResource( 39 ), "idle_turn", "start_run", SubResource( 40 ), "run_turn", "jump_up_stepL", SubResource( 41 ), "idle", "jump_up_vert", SubResource( 42 ), "jump_up_vert", "jump", SubResource( 43 ), "jump_land", "jump_up_vert", SubResource( 44 ), "run_stepR", "stop_run", SubResource( 50 ), "run_stepL", "stop_run", SubResource( 51 ), "stop_run", "idle", SubResource( 52 ), "stop_run", "run_turn", SubResource( 53 ), "start_run", "run_stepR", SubResource( 54 ) ]
+[sub_resource type="AnimationNodeStateMachine" id=48]
+states/idle/node = SubResource( 12 )
+states/idle/position = Vector2( 176, 255 )
+states/idle_turn/node = SubResource( 13 )
+states/idle_turn/position = Vector2( 267, 124 )
+states/jump/node = SubResource( 14 )
+states/jump/position = Vector2( 1011, 492 )
+states/jump_land/node = SubResource( 15 )
+states/jump_land/position = Vector2( 229, 371 )
+states/jump_up_stepL/node = SubResource( 16 )
+states/jump_up_stepL/position = Vector2( 1011, 371 )
+states/jump_up_stepR/node = SubResource( 17 )
+states/jump_up_stepR/position = Vector2( 729, 371 )
+states/jump_up_vert/node = SubResource( 18 )
+states/jump_up_vert/position = Vector2( 472, 371 )
+states/run_stepL/node = SubResource( 19 )
+states/run_stepL/position = Vector2( 1011, 255 )
+states/run_stepR/node = SubResource( 20 )
+states/run_stepR/position = Vector2( 729, 255 )
+states/run_turn/node = SubResource( 21 )
+states/run_turn/position = Vector2( 847, 124 )
+states/start_run/node = SubResource( 22 )
+states/start_run/position = Vector2( 510, 78 )
+states/stop_run/node = SubResource( 23 )
+states/stop_run/position = Vector2( 472, 255 )
+transitions = [ "idle_turn", "start_run", SubResource( 24 ), "idle", "idle_turn", SubResource( 25 ), "idle", "start_run", SubResource( 26 ), "start_run", "idle", SubResource( 27 ), "start_run", "jump_up_stepR", SubResource( 28 ), "start_run", "run_stepR", SubResource( 29 ), "run_stepR", "stop_run", SubResource( 30 ), "run_stepL", "stop_run", SubResource( 31 ), "stop_run", "idle", SubResource( 32 ), "stop_run", "run_turn", SubResource( 33 ), "run_turn", "jump_up_stepL", SubResource( 34 ), "run_stepL", "run_stepR", SubResource( 35 ), "run_stepR", "run_stepL", SubResource( 36 ), "run_turn", "start_run", SubResource( 37 ), "run_stepR", "jump_up_stepR", SubResource( 38 ), "run_stepL", "jump_up_stepL", SubResource( 39 ), "jump_up_stepL", "jump", SubResource( 40 ), "jump_up_stepR", "jump", SubResource( 41 ), "jump_up_vert", "jump", SubResource( 42 ), "jump", "jump_land", SubResource( 43 ), "idle", "jump_up_vert", SubResource( 44 ), "jump_land", "idle", SubResource( 45 ), "jump_land", "run_stepR", SubResource( 46 ), "jump_land", "jump_up_vert", SubResource( 47 ) ]
 start_node = "idle"
-graph_offset = Vector2( -345.377, -166.689 )
+graph_offset = Vector2( 0, 62.7273 )
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=46]
+[sub_resource type="AnimationNodeTimeScale" id=49]
 
-[sub_resource type="CapsuleShape2D" id=47]
-radius = 49.7986
-height = 287.314
+[sub_resource type="AnimationNodeBlendTree" id=50]
+graph_offset = Vector2( 0, 50.5 )
+nodes/StateMachine/node = SubResource( 48 )
+nodes/StateMachine/position = Vector2( 100, 120 )
+nodes/TimeScale/node = SubResource( 49 )
+nodes/TimeScale/position = Vector2( 400, 120 )
+nodes/output/position = Vector2( 660, 140 )
+node_connections = [ "TimeScale", 0, "StateMachine", "output", 0, "TimeScale" ]
 
-[sub_resource type="RayShape2D" id=48]
-length = 408.933
+[sub_resource type="AnimationNodeStateMachinePlayback" id=51]
 
 [node name="Amanda" type="KinematicBody2D"]
 scale = Vector2( 0.7, 0.7 )
@@ -296,7 +306,7 @@ __meta__ = {
 texture = ExtResource( 2 )
 vframes = 4
 hframes = 8
-frame = 12
+frame = 20
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/idle_lookR = SubResource( 1 )
@@ -306,21 +316,22 @@ anims/jump_stage3_lookR = SubResource( 4 )
 anims/justWait = SubResource( 5 )
 anims/run_stepL_lookR = SubResource( 6 )
 anims/run_stepR_lookR = SubResource( 7 )
-anims/start_run_lookR = SubResource( 9 )
-anims/stop_run = SubResource( 8 )
-
-[node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 45 )
-anim_player = NodePath("../AnimationPlayer")
-active = true
-parameters/playback = SubResource( 46 )
+anims/start_run_lookR = SubResource( 8 )
+anims/stop_run = SubResource( 9 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 14.2857, 42.8571 )
-shape = SubResource( 47 )
+shape = SubResource( 10 )
 
 [node name="EnviromentProximity" type="Area2D" parent="."]
 
 [node name="FloorProxy" type="CollisionShape2D" parent="EnviromentProximity"]
-shape = SubResource( 48 )
+shape = SubResource( 11 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 50 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/StateMachine/playback = SubResource( 51 )
+parameters/TimeScale/scale = 1.0
 [connection signal="body_shape_entered" from="EnviromentProximity" to="." method="OnSomethingClose"]

@@ -9,18 +9,20 @@ public class Amanda : KinematicBody2D
     public Vector2 velocity;
     public int proxyDetected = -1;
 
-    public int[] amandaGravities = {5000,2500,2000};
+    public int[] amandaGravities = { 5000, 2500, 2000 };
     public AnimationNodeStateMachinePlayback stateMachine;
+    private AnimationTree _animTree;
 
     public AmandaState state;
     private String _prevState = "idle";
+    public float timeScale = 1;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        AnimationTree _animTree = GetNode<AnimationTree>("AnimationTree");
+        _animTree = GetNode<AnimationTree>("AnimationTree");
         _animTree.Active = true;
-        stateMachine = (AnimationNodeStateMachinePlayback)_animTree.Get("parameters/playback");
+        stateMachine = (AnimationNodeStateMachinePlayback)_animTree.Get("parameters/StateMachine/playback");
         state = new AmandaIdle(this);
     }
 
@@ -28,6 +30,13 @@ public class Amanda : KinematicBody2D
     {
         state = checkState(stateMachine.GetCurrentNode());
         state._statePhysicsProcess(delta);
+        if (Input.IsActionJustPressed("ui_accept"))
+        {
+            if (timeScale == 1)
+                ChangeTime(5);
+            else
+                ChangeTime(1);
+        }
     }
     public override void _Process(float delta)
     {
@@ -56,7 +65,7 @@ public class Amanda : KinematicBody2D
 
             case "start_run":
                 return new AmandaStartRun(this);
-            
+
             case "stop_run":
                 return new AmandaStopRun(this);
 
@@ -80,6 +89,13 @@ public class Amanda : KinematicBody2D
             default:
                 return new AmandaTurn(this);
         }
+    }
+
+    private void ChangeTime(float scale)
+    {
+        _animTree.Set("parameters/TimeScale/scale", scale);
+        timeScale = scale;
+        Engine.TimeScale = 1 / scale;
     }
 
 }
@@ -117,7 +133,7 @@ class AmandaRun : AmandaState
 
     public override void _statePhysicsProcess(float delta)
     {
-        amanda.velocity.x = amanda.speed.x * _speedDir;
+        amanda.velocity.x = amanda.speed.x * _speedDir * amanda.timeScale;
         amanda.velocity.y = 10;
         amanda.velocity = amanda.MoveAndSlide(amanda.velocity, new Vector2(0, -1));
     }
@@ -126,7 +142,7 @@ class AmandaRun : AmandaState
 
         if (Input.IsActionPressed("ui_right")) _speedDir = 1;
         else if (Input.IsActionPressed("ui_left")) _speedDir = -1;
-        
+
 
         if (_speedDir * amanda.GetNode<Sprite>("Sprite").Scale.x < 0)     //this is only true when the player wants to turn
         {
@@ -159,12 +175,10 @@ class AmandaStartRun : AmandaState
     }
     public override void _statePhysicsProcess(float delta)
     {
-        amanda.velocity.x = amanda.speed.x * (1 - Mathf.Exp(-_time * _tau)) * _speedDir; //horizontal velocity follows an inverse exponential model
+        amanda.velocity.x = amanda.speed.x * amanda.timeScale * (1 - Mathf.Exp(-_time * amanda.timeScale * _tau)) * _speedDir; //horizontal velocity follows an inverse exponential model
         amanda.velocity.y = 10;
-        _time+=delta;
+        _time += delta;
         amanda.velocity = amanda.MoveAndSlide(amanda.velocity, new Vector2(0, -1));
-        if(Mathf.Abs(amanda.velocity.x)>580)
-            GD.Print(_time);
     }
     public override void _stateProcess(float delta)
     {
@@ -205,9 +219,9 @@ class AmandaStopRun : AmandaState
     }
     public override void _statePhysicsProcess(float delta)
     {
-        amanda.velocity.x = (_initVel) * Mathf.Exp(-_time * _tau); //horizontal velocity follows an inverse exponential model
+        amanda.velocity.x = (_initVel) * Mathf.Exp(-_time * amanda.timeScale * _tau); //horizontal velocity follows an inverse exponential model
         amanda.velocity.y = 10;
-        _time+=delta;
+        _time += delta;
         amanda.velocity = amanda.MoveAndSlide(amanda.velocity, new Vector2(0, -1));
     }
     public override void _stateProcess(float delta)
@@ -227,7 +241,7 @@ class AmandaStopRun : AmandaState
 #region IDLE STATE
 class AmandaIdle : AmandaState
 {
-    public AmandaIdle(Amanda amanda) : base(amanda) 
+    public AmandaIdle(Amanda amanda) : base(amanda)
     {
         _speedDir = 0;
     }
@@ -272,16 +286,15 @@ class AmandaJumpUp : AmandaState
     private int _gravity = 1000;
     public AmandaJumpUp(Amanda amanda) : base(amanda)
     {
-        amanda.velocity.y = amanda.speed.y;
+        amanda.velocity.y = amanda.speed.y * amanda.timeScale;
         _gravity = amanda.amandaGravities[0]; //<--------------------------debug
 
         if (Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
-            amanda.velocity.x = amanda.speed.x * _speedDir;
+            amanda.velocity.x = amanda.speed.x * _speedDir * amanda.timeScale;
     }
     public override void _statePhysicsProcess(float delta)
     {
-        amanda.velocity.y += _gravity * delta;
-        //amanda.velocity.x += amanda.speed.x * (1 - Mathf.Exp(_time / _tau)) * _speedDir;  //lazy implementation, not taking into account initial velocity
+        amanda.velocity.y += _gravity * delta * amanda.timeScale * amanda.timeScale;
         _time += delta;
         amanda.velocity = amanda.MoveAndSlide(amanda.velocity, new Vector2(0, -1));
 
@@ -313,8 +326,8 @@ class AmandaJumpHold : AmandaState
     }
     public override void _statePhysicsProcess(float delta)
     {
-        amanda.velocity.y += _gravity * delta;
-        amanda.velocity.x = amanda.speed.x * _speedDir + (_initVel - amanda.speed.x * _speedDir) * Mathf.Exp(-_time * _tau);  //inverse exponential aproach
+        amanda.velocity.y += _gravity * delta * amanda.timeScale * amanda.timeScale;
+        amanda.velocity.x = amanda.speed.x * amanda.timeScale * _speedDir + (_initVel - amanda.speed.x* amanda.timeScale * _speedDir) * Mathf.Exp(-_time * amanda.timeScale * _tau);  //inverse exponential aproach
         _time += delta;
         amanda.velocity = amanda.MoveAndSlide(amanda.velocity, new Vector2(0, -1));
 
@@ -364,9 +377,9 @@ class AmandaJumpLand : AmandaState
     }
     public override void _statePhysicsProcess(float delta)
     {
-        amanda.velocity.y += _gravity * delta;
-        amanda.velocity.x = amanda.speed.x * _speedDir + (_initVel - amanda.speed.x * _speedDir) * Mathf.Exp(-_time * _tau);  //inverse exponential aproach  //lazy implementation, not taking into account initial velocity
-        _time += delta;
+        amanda.velocity.y += _gravity * delta * amanda.timeScale * amanda.timeScale;
+        amanda.velocity.x = amanda.speed.x * amanda.timeScale * _speedDir + (_initVel - amanda.speed.x * amanda.timeScale * _speedDir) * Mathf.Exp(-_time * _tau);  //inverse exponential aproach  //lazy implementation, not taking into account initial velocity
+        _time += delta * amanda.timeScale;
         amanda.velocity = amanda.MoveAndSlide(amanda.velocity, new Vector2(0, -1));
 
 
@@ -391,7 +404,7 @@ class AmandaJumpLand : AmandaState
 
         if (Input.IsActionPressed("ui_up"))
             amanda.stateMachine.Travel("jump");
-        
+
         else if ((Input.IsActionPressed("ui_right") || Input.IsActionPressed("ui_left")) && amanda.IsOnFloor())
         {
             amanda.stateMachine.Travel("run_stepR");
