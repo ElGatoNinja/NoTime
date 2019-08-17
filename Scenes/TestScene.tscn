@@ -1,16 +1,18 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scenes/TestScene.cs" type="Script" id=1]
-[ext_resource path="res://Prefabs/enviroment/_ParentEnviroment.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Prefabs/amanda/Amanda.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Prefabs/amanda/Amanda.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Prefabs/spawner/PeriodicSpawner/PeriodicSpawner.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Prefabs/enviroment/_ParentEnviroment.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Prefabs/enviroment/_ParentPlatform.tscn" type="PackedScene" id=5]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
 
-[node name="Amanda" parent="." instance=ExtResource( 3 )]
+[node name="Amanda" parent="." instance=ExtResource( 2 )]
 position = Vector2( 562.306, 440 )
 
-[node name="TestPlatform" parent="." instance=ExtResource( 2 )]
+[node name="TestPlatform" parent="." instance=ExtResource( 4 )]
 position = Vector2( -10, 620 )
 scale = Vector2( 10, 1 )
 
@@ -21,12 +23,17 @@ margin_right = 562.306
 margin_bottom = 363.751
 text = "no me jodas"
 
-[node name="TestPlatform2" parent="." instance=ExtResource( 2 )]
+[node name="TestPlatform2" parent="." instance=ExtResource( 4 )]
 position = Vector2( 1140, 300 )
 
-[node name="TestPlatform3" parent="." instance=ExtResource( 2 )]
+[node name="TestPlatform3" parent="." instance=ExtResource( 4 )]
 position = Vector2( 1465.34, 50 )
 
-[node name="_ParentEnviroment" parent="." instance=ExtResource( 2 )]
+[node name="_ParentEnviroment" parent="." instance=ExtResource( 4 )]
 position = Vector2( 3860, -390 )
 scale = Vector2( 10, 1 )
+
+[node name="PeriodicSpawner" parent="." instance=ExtResource( 3 )]
+position = Vector2( 660, 230 )
+prefab = ExtResource( 5 )
+max = 5

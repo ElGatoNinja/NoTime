@@ -1,19 +1,40 @@
 using Godot;
-using System;
+using System.Collections.Generic;
 
 public class _spawner : Position2D
 {
     [Export]
     public PackedScene prefab;
-    
-    public override void _Ready()
-    {
-        
+    [Export]
+    public uint max = 1;
+
+    [Signal]
+    public delegate void Spawned(Node node);
+    [Signal]
+    public delegate void Despawned(Node node);
+
+    public void Spawn()
+    {   
+        if(GetChildren().Count >= max)
+        {
+            Despawn(GetChild(0));     //Avoid infinite items spawned, deletes the first item
+        }
+
+        Node aux = prefab.Instance();
+        AddChild(aux);
+        EmitSignal("Spawned",aux);
+
     }
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+    public void Despawn(Node node)
+    {
+        EmitSignal("Despawned",node);
+        node.QueueFree();
+    }
+
+    public void Despawn(string node)
+    {
+        EmitSignal("Despawned",GetNode(node));
+        GetNode(node).QueueFree();
+    }
 }
