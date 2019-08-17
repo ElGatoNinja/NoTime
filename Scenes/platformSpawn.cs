@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class TestBall : Area2D
+public class platformSpawn : Position2D
 {
     // Declare member variables here. Examples:
     // private int a = 2;
@@ -13,9 +13,9 @@ public class TestBall : Area2D
         
     }
 
-
-    public override void _Process(float delta)
-    {
-        Position = GetViewport().GetMousePosition();
-    }
+//  // Called every frame. 'delta' is the elapsed time since the previous frame.
+//  public override void _Process(float delta)
+//  {
+//      
+//  }
 }

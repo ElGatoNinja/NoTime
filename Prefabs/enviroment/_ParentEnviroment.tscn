@@ -1,15 +1,23 @@
 [gd_scene load_steps=2 format=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 147.895, 20.0147 )
+extents = Vector2( 148.302, 20.0147 )
 
-[node name="TestPlatform" type="StaticBody2D"]
-position = Vector2( 33.6696, 534.986 )
+[node name="_ParentEnviroment" type="StaticBody2D"]
+position = Vector2( 1.16441, 0.464783 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="ColorRect" type="ColorRect" parent="."]
 margin_right = 295.0
 margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 147.534, 19.8475 )
 shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]

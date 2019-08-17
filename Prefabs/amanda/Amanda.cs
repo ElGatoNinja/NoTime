@@ -4,7 +4,7 @@ using System;
 public class Amanda : KinematicBody2D
 {
 
-    public Vector2 speed = new Vector2(600, -1700);
+    public Vector2 speed = new Vector2(600, -1900);
 
     public Vector2 velocity;
     public int proxyDetected = -1;
@@ -210,7 +210,7 @@ class AmandaStartRun : AmandaState
 class AmandaStopRun : AmandaState
 {
     private float _time = 0;
-    private const float _tau = 5;
+    private const float _tau = 2;
     private float _initVel;
     public AmandaStopRun(Amanda amanda) : base(amanda)
     {
@@ -345,7 +345,7 @@ class AmandaJumpHold : AmandaState
             _speedDir = -1;
             _initVel = amanda.velocity.x;
         }
-        else if (!Input.IsActionPressed("ui_right") && !Input.IsActionPressed("ui_left") && _speedDir == -1)
+        else if (!Input.IsActionPressed("ui_right") && !Input.IsActionPressed("ui_left"))
         {
             _speedDir = 0;
             _initVel = amanda.velocity.x;
@@ -355,6 +355,10 @@ class AmandaJumpHold : AmandaState
         if (amanda.proxyDetected == 0)
         {
             amanda.stateMachine.Travel("jump_land");
+        }
+        else if(amanda.IsOnFloor())
+        {
+            amanda.stateMachine.Travel("jump_land");   
         }
     }
 }

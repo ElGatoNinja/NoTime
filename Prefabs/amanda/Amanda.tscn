@@ -1,7 +1,7 @@
 [gd_scene load_steps=54 format=2]
 
-[ext_resource path="res://Scripts/Amanda.cs" type="Script" id=1]
-[ext_resource path="res://assets/amanda/amandaSheet_1.png" type="Texture" id=2]
+[ext_resource path="res://Prefabs/amanda/Amanda.cs" type="Script" id=1]
+[ext_resource path="res://Prefabs/amanda/amandaSheet_1.png" type="Texture" id=2]
 
 [sub_resource type="Animation" id=1]
 resource_name = "idle_lookR"
@@ -285,12 +285,12 @@ graph_offset = Vector2( 0, 62.7273 )
 [sub_resource type="AnimationNodeTimeScale" id=49]
 
 [sub_resource type="AnimationNodeBlendTree" id=50]
-graph_offset = Vector2( 0, 50.5 )
+graph_offset = Vector2( 0, -76.75 )
 nodes/StateMachine/node = SubResource( 48 )
-nodes/StateMachine/position = Vector2( 100, 120 )
+nodes/StateMachine/position = Vector2( 60, 0 )
 nodes/TimeScale/node = SubResource( 49 )
-nodes/TimeScale/position = Vector2( 400, 120 )
-nodes/output/position = Vector2( 660, 140 )
+nodes/TimeScale/position = Vector2( 400, 0 )
+nodes/output/position = Vector2( 700, 0 )
 node_connections = [ "TimeScale", 0, "StateMachine", "output", 0, "TimeScale" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=51]
@@ -334,4 +334,7 @@ anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/StateMachine/playback = SubResource( 51 )
 parameters/TimeScale/scale = 1.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
 [connection signal="body_shape_entered" from="EnviromentProximity" to="." method="OnSomethingClose"]

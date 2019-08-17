@@ -1,0 +1,10 @@
+[gd_scene format=2]
+
+[node name="_ParentPlatform" type="KinematicBody2D"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( 13.9166, 1.85099 )
+scale = Vector2( 1.48876, 0.989122 )
+polygon = PoolVector2Array( -8.70436, -0.976034, 118.192, -0.976034, 118.192, 103.812, -8.70436, 105.298 )
+
+[node name="Sprite" type="Sprite" parent="."]
