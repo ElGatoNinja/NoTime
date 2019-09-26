@@ -6,17 +6,15 @@ public class TestScene : Node2D
     
     public Label control;
     public Amanda amanda;
-
-    public GridContainer GravityEdit;
-    public GridContainer SpeedEdit;
-
-    public GridContainer AccEdit;
+    
+    public PeriodicSpawner ps; 
 
 
     public override void _Ready()
     {
         control = GetNode<Label>("Control");
         amanda = GetNode<Amanda>("Amanda");
+        ps = GetNode<PeriodicSpawner>("PeriodicSpawner");
     }
 
 

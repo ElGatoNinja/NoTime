@@ -7,4 +7,5 @@
 script = ExtResource( 2 )
 
 [node name="Timer" type="Timer" parent="." index="0"]
+autostart = true
 [connection signal="timeout" from="Timer" to="." method="OnTimerTimeout"]

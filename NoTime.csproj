@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Prefabs\amanda\Amanda.cs" />
+    <Compile Include="Prefabs\enviroment\_ParentPlatform.cs" />
     <Compile Include="Prefabs\spawner\PeriodicSpawner\PeriodicSpawner.cs" />
     <Compile Include="Prefabs\spawner\_spawner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

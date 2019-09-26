@@ -30,7 +30,7 @@ public class Amanda : KinematicBody2D
     {
         state = checkState(stateMachine.GetCurrentNode());
         state._statePhysicsProcess(delta);
-        if (Input.IsActionJustPressed("ui_accept"))
+        if (Input.IsActionJustPressed("ui_changeTime"))
         {
             if (timeScale == 1)
                 ChangeTime(5);
@@ -57,7 +57,6 @@ public class Amanda : KinematicBody2D
         if (this._prevState == currentState) return this.state;
 
         this._prevState = currentState;
-        GD.Print(currentState);
         switch (currentState)
         {
             case "idle":
@@ -148,7 +147,7 @@ class AmandaRun : AmandaState
         {
             amanda.stateMachine.Travel("run_turn");
         }
-        else if (Input.IsActionJustPressed("ui_up"))
+        else if (Input.IsActionJustPressed("ui_jump"))
         {
             amanda.stateMachine.Travel("jump");
         }
@@ -190,7 +189,7 @@ class AmandaStartRun : AmandaState
         {
             amanda.stateMachine.Travel("run_turn");
         }
-        else if (Input.IsActionPressed("ui_up"))
+        else if (Input.IsActionPressed("ui_jump"))
         {
             amanda.stateMachine.Travel("jump");
         }
@@ -226,7 +225,7 @@ class AmandaStopRun : AmandaState
     }
     public override void _stateProcess(float delta)
     {
-        if (Input.IsActionJustPressed("ui_up"))
+        if (Input.IsActionJustPressed("ui_jump"))
         {
             amanda.stateMachine.Travel("jump");
         }
@@ -253,7 +252,7 @@ class AmandaIdle : AmandaState
     }
     public override void _stateProcess(float delta)
     {
-        if (Input.IsActionJustPressed("ui_up"))
+        if (Input.IsActionJustPressed("ui_jump"))
         {
             amanda.stateMachine.Travel("jump");
         }
@@ -406,7 +405,7 @@ class AmandaJumpLand : AmandaState
             _initVel = amanda.velocity.x;
         }
 
-        if (Input.IsActionPressed("ui_up"))
+        if (Input.IsActionPressed("ui_jump"))
             amanda.stateMachine.Travel("jump");
 
         else if ((Input.IsActionPressed("ui_right") || Input.IsActionPressed("ui_left")) && amanda.IsOnFloor())
@@ -430,6 +429,7 @@ class AmandaTurn : AmandaState
     public AmandaTurn(Amanda amanda) : base(amanda)
     {
         amanda.GetNode<Sprite>("Sprite").Scale *= new Vector2(-1, 1);
+        amanda.GetNode<CollisionPolygon2D>("CollisionPolygon2D").Scale *= new Vector2(-1, 1);
     }
     public override void _statePhysicsProcess(float delta)
     {
@@ -437,7 +437,7 @@ class AmandaTurn : AmandaState
     }
     public override void _stateProcess(float delta)
     {
-        if (Input.IsActionJustPressed("ui_up"))
+        if (Input.IsActionJustPressed("ui_jump"))
         {
             amanda.stateMachine.Travel("jump");
         }
