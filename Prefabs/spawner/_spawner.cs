@@ -15,11 +15,8 @@ public class _spawner : Position2D
 
     public void Spawn()
     {   
-        GD.Print("Spaaaaaawned!!!");
         if(GetChildren().Count >= max)
         {
-            GD.Print("Despaaaawn NOW!!!");
-            GD.Print(GetChild(1).Name);
             Despawn(GetChild(1));     //Avoid infinite items spawned, deletes the first item
         }
 

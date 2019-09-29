@@ -14,6 +14,7 @@ public class Amanda : KinematicBody2D
     private AnimationTree _animTree;
 
     public AmandaState state;
+    public Timer fallingTimer;
     private String _prevState = "idle";
     public float timeScale = 1;
 
@@ -24,6 +25,7 @@ public class Amanda : KinematicBody2D
         _animTree.Active = true;
         stateMachine = (AnimationNodeStateMachinePlayback)_animTree.Get("parameters/StateMachine/playback");
         state = new AmandaIdle(this);
+        fallingTimer = GetNode<Timer>("FallingTimer");
     }
 
     public override void _PhysicsProcess(float delta)
@@ -49,8 +51,10 @@ public class Amanda : KinematicBody2D
     {
         proxyDetected = areaShape;
     }
-
-
+    private void OnFallingTimerTimeout()
+    {
+        stateMachine.Start("falling");
+    }
 
     private AmandaState checkState(String currentState)
     {
@@ -81,6 +85,7 @@ public class Amanda : KinematicBody2D
                 return new AmandaJumpHold(this);
 
             case "jump_land":
+            case "falling":
                 return new AmandaJumpLand(this);
 
             case "run_turn":
@@ -120,14 +125,13 @@ public abstract class AmandaState
 //-----------------------------------------------------------------
 //RUN STATE
 //-----------------------------------------------------------------
-#region RUN STATE
-
 class AmandaRun : AmandaState
 {
 
     public AmandaRun(Amanda amanda) : base(amanda)
     {
         _speedDir = (int)amanda.GetNode<Sprite>("Sprite").Scale.x;
+        amanda.GetNode<CollisionShape2D>("FloorReference").Disabled = false;
     }
 
     public override void _statePhysicsProcess(float delta)
@@ -142,7 +146,15 @@ class AmandaRun : AmandaState
         if (Input.IsActionPressed("ui_right")) _speedDir = 1;
         else if (Input.IsActionPressed("ui_left")) _speedDir = -1;
 
+        GD.Print(amanda.fallingTimer.TimeLeft);
+        GD.Print(amanda.fallingTimer.TimeLeft==0);
 
+        if(!amanda.IsOnFloor()) 
+        {                          
+            amanda.stateMachine.Start("falling");
+        }
+        
+        
         if (_speedDir * amanda.GetNode<Sprite>("Sprite").Scale.x < 0)     //this is only true when the player wants to turn
         {
             amanda.stateMachine.Travel("run_turn");
@@ -157,12 +169,10 @@ class AmandaRun : AmandaState
         }
     }
 }
-#endregion
 
 //-----------------------------------------------------------------
 //START_RUN STATE
 //-----------------------------------------------------------------
-#region START_RUN STATE
 class AmandaStartRun : AmandaState
 {
     private const float _tau = 4;
@@ -170,7 +180,7 @@ class AmandaStartRun : AmandaState
 
     public AmandaStartRun(Amanda amanda) : base(amanda)
     {
-
+        amanda.GetNode<CollisionShape2D>("FloorReference").Disabled = false;
     }
     public override void _statePhysicsProcess(float delta)
     {
@@ -184,6 +194,11 @@ class AmandaStartRun : AmandaState
         if (Input.IsActionPressed("ui_right")) _speedDir = 1;
         else if (Input.IsActionPressed("ui_left")) _speedDir = -1;
         else _speedDir = 0;
+
+        if(!amanda.IsOnFloor()) 
+        {                          
+            amanda.stateMachine.Start("falling");
+        }
 
         if (_speedDir * amanda.GetNode<Sprite>("Sprite").Scale.x < 0)     //this is only true when the player wants to turn
         {
@@ -199,13 +214,10 @@ class AmandaStartRun : AmandaState
         }
     }
 }
-#endregion
 
 //-----------------------------------------------------------------
 //STOP_RUN STATE
 //-----------------------------------------------------------------
-#region STOP_RUN STATE
-
 class AmandaStopRun : AmandaState
 {
     private float _time = 0;
@@ -215,6 +227,7 @@ class AmandaStopRun : AmandaState
     {
         _initVel = amanda.velocity.x;
         _speedDir = -_speedDir;
+        amanda.GetNode<CollisionShape2D>("FloorReference").Disabled = false;
     }
     public override void _statePhysicsProcess(float delta)
     {
@@ -225,6 +238,11 @@ class AmandaStopRun : AmandaState
     }
     public override void _stateProcess(float delta)
     {
+        if(!amanda.IsOnFloor()) 
+        {                          
+            amanda.stateMachine.Start("falling");
+        }
+
         if (Input.IsActionJustPressed("ui_jump"))
         {
             amanda.stateMachine.Travel("jump");
@@ -232,17 +250,15 @@ class AmandaStopRun : AmandaState
     }
 }
 
-#endregion
-
 //-----------------------------------------------------------------
 //IDLE STATE
 //-----------------------------------------------------------------
-#region IDLE STATE
 class AmandaIdle : AmandaState
 {
     public AmandaIdle(Amanda amanda) : base(amanda)
     {
         _speedDir = 0;
+        amanda.GetNode<CollisionShape2D>("FloorReference").Disabled = false;
     }
     public override void _statePhysicsProcess(float delta)
     {
@@ -252,7 +268,12 @@ class AmandaIdle : AmandaState
     }
     public override void _stateProcess(float delta)
     {
-        if (Input.IsActionJustPressed("ui_jump"))
+        if(!amanda.IsOnFloor()) 
+        {                          
+            amanda.stateMachine.Start("falling");
+        }
+
+         if (Input.IsActionJustPressed("ui_jump"))
         {
             amanda.stateMachine.Travel("jump");
         }
@@ -272,12 +293,10 @@ class AmandaIdle : AmandaState
         }
     }
 }
-#endregion
 
 //-----------------------------------------------------------------
 //JUMP UP STATE
 //-----------------------------------------------------------------
-#region JUMP UP STATE
 class AmandaJumpUp : AmandaState
 {
     private float _time = 0;
@@ -285,6 +304,7 @@ class AmandaJumpUp : AmandaState
     private int _gravity = 1000;
     public AmandaJumpUp(Amanda amanda) : base(amanda)
     {
+        amanda.GetNode<CollisionShape2D>("FloorReference").Disabled = true;
         amanda.velocity.y = amanda.speed.y * amanda.timeScale;
         _gravity = amanda.amandaGravities[0]; //<--------------------------debug
 
@@ -304,12 +324,10 @@ class AmandaJumpUp : AmandaState
         //nothing yet
     }
 }
-#endregion
 
 //-----------------------------------------------------------------
 //JUMP HOLD STATE
 //-----------------------------------------------------------------
-#region JUMP HOLD STATE
 class AmandaJumpHold : AmandaState
 {
     private float _time = 0;
@@ -318,6 +336,7 @@ class AmandaJumpHold : AmandaState
     private float _initVel;
     public AmandaJumpHold(Amanda amanda) : base(amanda)
     {
+        amanda.GetNode<CollisionShape2D>("FloorReference").Disabled = true;
         _initVel = amanda.velocity.x;
 
         _gravity = amanda.amandaGravities[1];  //<-------------------DEBUG
@@ -361,12 +380,10 @@ class AmandaJumpHold : AmandaState
         }
     }
 }
-#endregion 
 
 //-----------------------------------------------------------------
 //JUMP LAND STATE
 //-----------------------------------------------------------------
-#region JUMP LAND STATE
 class AmandaJumpLand : AmandaState
 {
     private float _time = 0;
@@ -418,12 +435,10 @@ class AmandaJumpLand : AmandaState
         }
     }
 }
-#endregion
 
 //-----------------------------------------------------------------
 //RUN_TURN STATE
 //-----------------------------------------------------------------
-#region RUN_TURN STATE
 class AmandaTurn : AmandaState
 {
     public AmandaTurn(Amanda amanda) : base(amanda)
@@ -444,4 +459,3 @@ class AmandaTurn : AmandaState
     }
 
 }
-#endregion
